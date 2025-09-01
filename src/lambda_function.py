@@ -73,16 +73,13 @@ def get_summary_from_bedrock(transcript):
 # --- El Handler Principal de Lambda ---
 # Esta es la función que AWS Lambda ejecutará.
 
+# --- El Handler Principal de Lambda (VERSIÓN FINAL Y ROBUSTA) ---
+
 def lambda_handler(event, context):
-    """
-    Función principal que se activa con un evento de API Gateway.
-    Espera un body JSON con: {"bucket_name": "...", "object_name": "..."}
-    """
     print(f"Evento recibido: {event}")
 
     try:
-        # 1. Parsear los datos de entrada del evento de API Gateway
-        # El body llega como un string, así que necesitamos convertirlo a un diccionario
+        # 1. Parsear los datos de entrada
         body = json.loads(event.get('body', '{}'))
         bucket_name = body.get('bucket_name')
         object_name = body.get('object_name')
@@ -90,36 +87,35 @@ def lambda_handler(event, context):
         if not bucket_name or not object_name:
             raise ValueError("Faltan los parámetros 'bucket_name' o 'object_name' en el body.")
 
-        print(f"Procesando archivo: s3://{bucket_name}/{object_name}")
+        # 2. Verificación de Pre-condición: Asegurarse de que el objeto existe y es accesible
+        # Esto no solo depura, sino que previene errores y parece solucionar un problema de timing de AWS.
+        try:
+            print(f"Verificando la existencia del objeto: s3://{bucket_name}/{object_name}")
+            s3_client.head_object(Bucket=bucket_name, Key=object_name)
+            print("Verificación exitosa. El objeto existe y es accesible.")
+        except Exception as s3_error:
+            print(f"Fallo en la verificación de S3: {s3_error}")
+            raise Exception(f"El objeto S3 especificado no se encuentra o no se puede acceder: s3://{bucket_name}/{object_name}")
 
-        # 2. Ejecutar el pipeline de IA (las mismas funciones que antes)
+        # 3. Ejecutar el pipeline de IA
+        print("Iniciando pipeline de IA...")
         transcription_job = start_transcription_job(object_name, bucket_name)
         final_transcript = get_transcription_result(transcription_job)
         summary = get_summary_from_bedrock(final_transcript)
         
-        print(f"Análisis generado con éxito.")
+        print("Análisis generado con éxito.")
 
-        # 3. Devolver una respuesta exitosa (formato requerido por API Gateway)
+        # 4. Devolver una respuesta exitosa
         return {
             'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' # Permite que cualquier web llame a nuestra API
-            },
-            'body': json.dumps({
-                'summary': summary,
-                'transcript': final_transcript
-            })
+            'headers': { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+            'body': json.dumps({ 'summary': summary, 'transcript': final_transcript })
         }
 
     except Exception as e:
         print(f"Error durante la ejecución: {e}")
-        # 4. Devolver una respuesta de error (formato requerido por API Gateway)
         return {
             'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            'headers': { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
             'body': json.dumps({'error': str(e)})
         }
