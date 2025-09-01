@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meeting Summarizer - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 min-h-screen p-4">
+    <div class="max-w-4xl mx-auto py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">
+                🎙️ AI Meeting Summarizer
+            </h1>
+            <p class="text-white/80 text-lg">
+                Convierte audio de reuniones en insights accionables con IA
+            </p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-8">
+            <!-- Input Section -->
+            <div class="space-y-6 mb-8">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        🔑 API Key
+                    </label>
+                    <input type="password" id="apiKey" 
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                           placeholder="Ingresa tu API key"
+                           value="HqFd2VrMhL9utqqIO9J23Q0i0Zz8HQL3yhT4QIJc">
+                    <p class="text-xs text-gray-500 mt-1">Esta clave es solo para demo</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        📁 Archivo de Audio
+                    </label>
+                    <select id="audioPath" 
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+                        <option value="audio/test.mp3">Test Meeting - Despliegue del Viernes</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Archivos pre-cargados en S3 para demo</p>
+                </div>
+                
+                <button onclick="processAudio()" 
+                        id="processBtn"
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 rounded-lg hover:from-orange-600 hover:to-red-600 transition transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    🚀 Procesar Reunión
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading" class="hidden">
+                <div class="bg-orange-50 rounded-lg p-6 text-center">
+                    <div class="inline-flex items-center space-x-3">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+                        <span class="text-orange-700 font-medium">Procesando audio...</span>
+                    </div>
+                    <div class="mt-3 text-sm text-orange-600">
+                        <p>1. Transcribiendo con Amazon Transcribe... ⏳</p>
+                        <p class="mt-1">2. Analizando con Claude 3 Sonnet... 🤖</p>
+                        <p class="mt-1 text-xs">(Esto puede tomar 15-30 segundos)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="hidden space-y-6">
+                <!-- Summary -->
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg p-6 border-l-4 border-orange-500">
+                    <h3 class="font-bold text-orange-900 mb-3 text-lg flex items-center">
+                        📋 Análisis Generado por IA
+                    </h3>
+                    <div id="summaryContent" class="text-gray-700 whitespace-pre-line leading-relaxed"></div>
+                </div>
+                
+                <!-- Transcript -->
+                <details class="bg-gray-50 rounded-lg p-6">
+                    <summary class="font-bold text-gray-700 cursor-pointer hover:text-gray-900">
+                        📝 Ver Transcripción Completa
+                    </summary>
+                    <div id="transcriptContent" class="mt-4 text-gray-600 leading-relaxed"></div>
+                </details>
+
+                <!-- Metrics -->
+                <div class="grid grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                        <p class="text-2xl font-bold text-orange-600" id="processingTime">-</p>
+                        <p class="text-xs text-gray-500">Tiempo de Procesamiento</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                        <p class="text-2xl font-bold text-green-600" id="wordCount">-</p>
+                        <p class="text-xs text-gray-500">Palabras Transcritas</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                        <p class="text-2xl font-bold text-blue-600">95%+</p>
+                        <p class="text-xs text-gray-500">Precisión Estimada</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="error" class="hidden">
+                <div class="bg-red-50 rounded-lg p-6 border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-3">⚠️</span>
+                        <div>
+                            <h4 class="font-bold text-red-800">Error al procesar</h4>
+                            <p id="errorMessage" class="text-red-600 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <p class="text-white/80 text-sm">
+                Construido con AWS Lambda, Amazon Transcribe y Amazon Bedrock
+            </p>
+            <div class="mt-2 space-x-4">
+                <a href="https://github.com/AndresFMC/ai-meeting-summarizer" 
+                   target="_blank"
+                   class="text-white underline hover:no-underline">
+                    GitHub
+                </a>
+                <span class="text-white/60">•</span>
+                <a href="https://www.linkedin.com/in/andres-fmc/" 
+                   target="_blank"
+                   class="text-white underline hover:no-underline">
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://j6lp7snko4.execute-api.eu-central-1.amazonaws.com/v1/summarize';
+        const BUCKET_NAME = 'andres-summarizer-audio-uploads-1';
+        
+        async function processAudio() {
+            const apiKey = document.getElementById('apiKey').value;
+            const audioPath = document.getElementById('audioPath').value;
+            const startTime = Date.now();
+            
+            if (!apiKey || !audioPath) {
+                showError('Por favor completa todos los campos');
+                return;
+            }
+            
+            // Reset UI
+            document.getElementById('processBtn').disabled = true;
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
+                    body: JSON.stringify({
+                        bucket_name: BUCKET_NAME,
+                        object_name: audioPath
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Calculate metrics
+                    const processingTime = ((Date.now() - startTime) / 1000).toFixed(1);
+                    const wordCount = data.transcript.split(' ').length;
+                    
+                    // Display results
+                    document.getElementById('summaryContent').textContent = data.summary;
+                    document.getElementById('transcriptContent').textContent = data.transcript;
+                    document.getElementById('processingTime').textContent = `${processingTime}s`;
+                    document.getElementById('wordCount').textContent = wordCount;
+                    
+                    document.getElementById('results').classList.remove('hidden');
+                } else {
+                    showError(data.error || 'Error al procesar el audio');
+                }
+            } catch (err) {
+                showError('Error de conexión: ' + err.message);
+            } finally {
+                document.getElementById('processBtn').disabled = false;
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+        }
+        
+        // Allow Enter key to submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('processBtn').disabled) {
+                processAudio();
+            }
+        });
+    </script>
+</body>
+</html>
