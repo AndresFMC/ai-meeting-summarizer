@@ -306,7 +306,7 @@ Distributed under MIT License. See `LICENSE` for details.
 **Andrés F. Martínez Calderón**  
 Generative AI Engineer  
 
-- 📧 Email: [contact@example.com](mailto:contact@example.com)
+- 📧 Email: [afmartinezcalderon@gmail.com](mailto:contact@example.com)
 - 💼 LinkedIn: [linkedin.com/in/andres-fmc](https://www.linkedin.com/in/andres-fmc/)
 - 🐙 GitHub: [@AndresFMC](https://github.com/AndresFMC)
 - 📍 Location: Gdańsk, Poland
