@@ -39,7 +39,7 @@
                     </label>
                     <select id="audioPath" 
                             class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
-                        <option value="audio/test.mp3">Test Meeting - Despliegue del Viernes</option>
+                        <option value="">Cargando archivos de audio...</option>
                     </select>
                     <p class="text-xs text-gray-500 mt-1">Archivos pre-cargados en S3 para demo</p>
                 </div>
@@ -137,9 +137,49 @@
     </div>
 
     <script>
-        const API_URL = 'https://j6lp7snko4.execute-api.eu-central-1.amazonaws.com/v1/summarize';
+        const API_URL_BASE = 'https://j6lp7snko4.execute-api.eu-central-1.amazonaws.com/v1';
+        const API_URL = API_URL_BASE + '/summarize';
+        const LIST_AUDIO_URL = API_URL_BASE + '/list-audio';
         const BUCKET_NAME = 'andres-summarizer-audio-uploads-1';
         
+        async function loadAudioFiles() {
+            try {
+                const response = await fetch(LIST_AUDIO_URL, {
+                    headers: {
+                        'x-api-key': document.getElementById('apiKey').value || 'HqFd2VrMhL9utqqIO9J23Q0i0Zz8HQL3yhT4QIJc'
+                    }
+                });
+                const data = await response.json();
+                
+                const select = document.getElementById('audioPath');
+                select.innerHTML = '';
+                
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const option = document.createElement('option');
+                        option.value = file.key;
+                        // Crear nombre más amigable
+                        let displayName = file.name;
+                        if (file.name === 'test.mp3') {
+                            displayName = 'Test Meeting - Despliegue del Viernes';
+                        } else if (file.name.includes('685eba29')) {
+                            displayName = 'Sample Meeting 1';
+                        } else if (file.name.includes('d30e54d1')) {
+                            displayName = 'Sample Meeting 2';
+                        }
+                        option.textContent = `${displayName} (${file.size_mb}MB)`;
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">No hay archivos de audio disponibles</option>';
+                }
+            } catch (error) {
+                console.error('Error cargando archivos:', error);
+                document.getElementById('audioPath').innerHTML = '<option value="">Error cargando archivos</option>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAudioFiles);
         async function processAudio() {
             const apiKey = document.getElementById('apiKey').value;
             const audioPath = document.getElementById('audioPath').value;
