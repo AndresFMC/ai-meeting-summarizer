@@ -240,13 +240,26 @@ No environment variables required. All configuration is code-based.
 
 ## 📊 Performance Metrics
 
-| Metric | Value |
-|--------|-------|
-| Average processing time | 15-20 seconds |
-| Transcription accuracy | >95% |
-| Cost per invocation | <$0.01 |
-| Availability | 99.9% |
-| Concurrent executions | 1000 simultaneous |
+| Metric | Value | Monitoring |
+|--------|-------|------------|
+| Average processing time | 13-15 seconds | CloudWatch |
+| Transcription accuracy | >95% | Manual validation |
+| Cost per minute of audio | $0.025-0.035 | Real-time tracking |
+| Availability | 99.9% | AWS CloudWatch |
+| Concurrent executions | 1000 simultaneous | AWS Lambda |
+| Token efficiency | Variable by content length | LangSmith |
+
+### Cost Analysis (per minute of audio)
+- **Base cost**: $0.025-0.035/minute
+- **Breakdown**: 
+  - Transcription: $0.024/minute (85%)
+  - AI Analysis: $0.002-0.006/minute (15%)
+  - Infrastructure: <$0.001/minute
+
+**Examples:**
+- 1-minute meeting: ~$0.03
+- 5-minute discussion: ~$0.15  
+- 30-minute conference: ~$0.90
 
 ## 🏢 Business Impact
 

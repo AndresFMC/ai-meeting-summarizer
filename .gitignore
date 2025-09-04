@@ -145,6 +145,9 @@ env.bak/
 venv.bak/
 package
 deployment_package.zip
+.env.local
+.env.production
+config/secrets.py
 
 # Spyder project settings
 .spyderproject

@@ -8,6 +8,19 @@ import requests
 from langchain_aws import ChatBedrock
 from langchain_core.messages import HumanMessage
 
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno para desarrollo local
+load_dotenv()
+
+# Configurar LangSmith para local
+LANGSMITH_ENDPOINT="https://eu.api.smith.langchain.com"
+if os.getenv('LANGSMITH_API_KEY'):
+    os.environ["LANGCHAIN_TRACING_V2"] = "true"
+    os.environ["LANGCHAIN_API_KEY"] = os.getenv('LANGSMITH_API_KEY')
+    os.environ["LANGCHAIN_PROJECT"] = "AI-Meeting-Summarizer-dev"
+
 # --- Configuración Inicial ---
 # (Asegúrate de que tu AWS CLI esté configurado)
 s3_client = boto3.client('s3')

@@ -2,3 +2,5 @@ boto3
 requests
 langchain
 langchain-aws
+langsmith
+langchain-community
