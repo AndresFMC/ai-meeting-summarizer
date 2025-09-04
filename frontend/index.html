@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +14,30 @@
                 🎙️ AI Meeting Summarizer
             </h1>
             <p class="text-white/80 text-lg">
-                Convierte audio de reuniones en insights accionables con IA
+                Transform meeting audio into actionable insights with AI
             </p>
         </div>
 
         <!-- Main Card -->
         <div class="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-8">
+            <!-- Demo Notice -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            <strong>Portfolio Demo:</strong> This is a demonstration version. For security reasons, API access is limited. 
+                            <a href="https://www.linkedin.com/in/andres-fmc/" target="_blank" class="underline">Contact me on LinkedIn</a> 
+                            for a live demonstration or temporary API access.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Input Section -->
             <div class="space-y-6 mb-8">
                 <div>
@@ -28,27 +46,58 @@
                     </label>
                     <input type="password" id="apiKey" 
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                           placeholder="Ingresa tu API key"
-                           value="HqFd2VrMhL9utqqIO9J23Q0i0Zz8HQL3yhT4QIJc">
-                    <p class="text-xs text-gray-500 mt-1">Esta clave es solo para demo</p>
+                           placeholder="Request temporary API key via LinkedIn"
+                           value="">
+                    <p class="text-xs text-gray-500 mt-1">
+                        API access is restricted for security. Contact 
+                        <a href="https://www.linkedin.com/in/andres-fmc/" target="_blank" class="text-blue-600 underline">@andres-fmc</a> 
+                        for demonstration access.
+                    </p>
                 </div>
                 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        📁 Archivo de Audio
+                        📁 Audio File
                     </label>
                     <select id="audioPath" 
                             class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
-                        <option value="">Cargando archivos de audio...</option>
+                        <option value="">Loading audio files...</option>
                     </select>
-                    <p class="text-xs text-gray-500 mt-1">Archivos pre-cargados en S3 para demo</p>
+                    <p class="text-xs text-gray-500 mt-1">Pre-loaded sample audio files for demonstration</p>
                 </div>
                 
                 <button onclick="processAudio()" 
                         id="processBtn"
                         class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 rounded-lg hover:from-orange-600 hover:to-red-600 transition transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
-                    🚀 Procesar Reunión
+                    🚀 Process Meeting
                 </button>
+            </div>
+
+            <!-- Demo Info -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                <h3 class="font-bold text-gray-800 mb-2">🎥 Live Demo Available</h3>
+                <p class="text-gray-600 text-sm mb-3">
+                    This application demonstrates real-time audio transcription and AI-powered meeting analysis. 
+                    The system processes audio files and generates structured summaries with action items and key decisions.
+                </p>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <strong class="text-gray-700">Technology Stack:</strong>
+                        <ul class="text-gray-600 mt-1">
+                            <li>• AWS Lambda (Serverless)</li>
+                            <li>• Amazon Transcribe</li>
+                            <li>• Amazon Bedrock (Claude 3)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong class="text-gray-700">Features:</strong>
+                        <ul class="text-gray-600 mt-1">
+                            <li>• Real-time cost tracking</li>
+                            <li>• LangSmith observability</li>
+                            <li>• CloudWatch monitoring</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <!-- Loading State -->
@@ -56,12 +105,12 @@
                 <div class="bg-orange-50 rounded-lg p-6 text-center">
                     <div class="inline-flex items-center space-x-3">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-                        <span class="text-orange-700 font-medium">Procesando audio...</span>
+                        <span class="text-orange-700 font-medium">Processing audio...</span>
                     </div>
                     <div class="mt-3 text-sm text-orange-600">
-                        <p>1. Transcribiendo con Amazon Transcribe... ⏳</p>
-                        <p class="mt-1">2. Analizando con Claude 3 Sonnet... 🤖</p>
-                        <p class="mt-1 text-xs">(Esto puede tomar 15-30 segundos)</p>
+                        <p>1. Transcribing with Amazon Transcribe... ⏳</p>
+                        <p class="mt-1">2. Analyzing with Claude 3 Sonnet... 🤖</p>
+                        <p class="mt-1 text-xs">(This may take 15-30 seconds)</p>
                     </div>
                 </div>
             </div>
@@ -71,7 +120,7 @@
                 <!-- Summary -->
                 <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg p-6 border-l-4 border-orange-500">
                     <h3 class="font-bold text-orange-900 mb-3 text-lg flex items-center">
-                        📋 Análisis Generado por IA
+                        📋 AI-Generated Analysis
                     </h3>
                     <div id="summaryContent" class="text-gray-700 whitespace-pre-line leading-relaxed"></div>
                 </div>
@@ -79,24 +128,28 @@
                 <!-- Transcript -->
                 <details class="bg-gray-50 rounded-lg p-6">
                     <summary class="font-bold text-gray-700 cursor-pointer hover:text-gray-900">
-                        📝 Ver Transcripción Completa
+                        📝 View Complete Transcript
                     </summary>
                     <div id="transcriptContent" class="mt-4 text-gray-600 leading-relaxed"></div>
                 </details>
 
                 <!-- Metrics -->
-                <div class="grid grid-cols-3 gap-4 mt-6">
+                <div class="grid grid-cols-4 gap-4 mt-6">
                     <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
                         <p class="text-2xl font-bold text-orange-600" id="processingTime">-</p>
-                        <p class="text-xs text-gray-500">Tiempo de Procesamiento</p>
+                        <p class="text-xs text-gray-500">Processing Time</p>
                     </div>
                     <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
                         <p class="text-2xl font-bold text-green-600" id="wordCount">-</p>
-                        <p class="text-xs text-gray-500">Palabras Transcritas</p>
+                        <p class="text-xs text-gray-500">Words Transcribed</p>
                     </div>
                     <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
-                        <p class="text-2xl font-bold text-blue-600">95%+</p>
-                        <p class="text-xs text-gray-500">Precisión Estimada</p>
+                        <p class="text-2xl font-bold text-blue-600" id="estimatedCost">-</p>
+                        <p class="text-xs text-gray-500">Estimated Cost</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                        <p class="text-2xl font-bold text-purple-600">95%+</p>
+                        <p class="text-xs text-gray-500">Accuracy</p>
                     </div>
                 </div>
             </div>
@@ -107,7 +160,7 @@
                     <div class="flex items-start">
                         <span class="text-2xl mr-3">⚠️</span>
                         <div>
-                            <h4 class="font-bold text-red-800">Error al procesar</h4>
+                            <h4 class="font-bold text-red-800">Processing Error</h4>
                             <p id="errorMessage" class="text-red-600 mt-1"></p>
                         </div>
                     </div>
@@ -118,7 +171,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center">
             <p class="text-white/80 text-sm">
-                Construido con AWS Lambda, Amazon Transcribe y Amazon Bedrock
+                Built with AWS Lambda, Amazon Transcribe, Amazon Bedrock, and LangSmith
             </p>
             <div class="mt-2 space-x-4">
                 <a href="https://github.com/AndresFMC/ai-meeting-summarizer" 
@@ -142,13 +195,31 @@
         const LIST_AUDIO_URL = API_URL_BASE + '/list-audio';
         const BUCKET_NAME = 'andres-summarizer-audio-uploads-1';
         
+        // Rate limiting
+        let lastRequestTime = 0;
+        const MIN_REQUEST_INTERVAL = 60000; // 1 minute between requests
+        let requestCount = 0;
+        const MAX_REQUESTS_PER_SESSION = 3;
+        
         async function loadAudioFiles() {
+            const apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                const select = document.getElementById('audioPath');
+                select.innerHTML = '<option value="">Enter API key to load audio files</option>';
+                return;
+            }
+            
             try {
                 const response = await fetch(LIST_AUDIO_URL, {
                     headers: {
-                        'x-api-key': document.getElementById('apiKey').value || 'HqFd2VrMhL9utqqIO9J23Q0i0Zz8HQL3yhT4QIJc'
+                        'x-api-key': apiKey
                     }
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const data = await response.json();
                 
                 const select = document.getElementById('audioPath');
@@ -158,37 +229,75 @@
                     data.files.forEach(file => {
                         const option = document.createElement('option');
                         option.value = file.key;
-                        // Crear nombre más amigable
+                        // Create friendly names
                         let displayName = file.name;
                         if (file.name === 'test.mp3') {
-                            displayName = 'Test Meeting - Despliegue del Viernes';
+                            displayName = 'Sample Meeting - Project Discussion';
                         } else if (file.name.includes('685eba29')) {
-                            displayName = 'Sample Meeting 1';
+                            displayName = 'Sample Meeting - Budget Review';
                         } else if (file.name.includes('d30e54d1')) {
-                            displayName = 'Sample Meeting 2';
+                            displayName = 'Sample Meeting - Team Standup';
                         }
                         option.textContent = `${displayName} (${file.size_mb}MB)`;
                         select.appendChild(option);
                     });
                 } else {
-                    select.innerHTML = '<option value="">No hay archivos de audio disponibles</option>';
+                    select.innerHTML = '<option value="">No audio files available</option>';
                 }
             } catch (error) {
-                console.error('Error cargando archivos:', error);
-                document.getElementById('audioPath').innerHTML = '<option value="">Error cargando archivos</option>';
+                console.error('Error loading files:', error);
+                document.getElementById('audioPath').innerHTML = '<option value="">Error loading files - Check API key</option>';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', loadAudioFiles);
+        
+        // Load files when API key is entered
+        document.getElementById('apiKey').addEventListener('input', debounce(loadAudioFiles, 500));
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
         async function processAudio() {
             const apiKey = document.getElementById('apiKey').value;
             const audioPath = document.getElementById('audioPath').value;
-            const startTime = Date.now();
+            const currentTime = Date.now();
             
-            if (!apiKey || !audioPath) {
-                showError('Por favor completa todos los campos');
+            // Validation
+            if (!apiKey) {
+                showError('Please enter an API key. Contact @andres-fmc on LinkedIn for access.');
                 return;
             }
+            
+            if (!audioPath) {
+                showError('Please select an audio file');
+                return;
+            }
+            
+            // Rate limiting check
+            if (requestCount >= MAX_REQUESTS_PER_SESSION) {
+                showError(`Demo limit reached (${MAX_REQUESTS_PER_SESSION} requests per session). Refresh page to reset or contact for extended access.`);
+                return;
+            }
+            
+            const timeSinceLastRequest = currentTime - lastRequestTime;
+            if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+                const remainingTime = Math.ceil((MIN_REQUEST_INTERVAL - timeSinceLastRequest) / 1000);
+                showError(`Please wait ${remainingTime} seconds before processing another audio file.`);
+                return;
+            }
+            
+            lastRequestTime = currentTime;
+            requestCount++;
+            
+            const startTime = Date.now();
             
             // Reset UI
             document.getElementById('processBtn').disabled = true;
@@ -215,19 +324,31 @@
                     // Calculate metrics
                     const processingTime = ((Date.now() - startTime) / 1000).toFixed(1);
                     const wordCount = data.transcript.split(' ').length;
+                    const estimatedCost = data.metrics?.estimated_cost || 0;
                     
                     // Display results
                     document.getElementById('summaryContent').textContent = data.summary;
                     document.getElementById('transcriptContent').textContent = data.transcript;
                     document.getElementById('processingTime').textContent = `${processingTime}s`;
                     document.getElementById('wordCount').textContent = wordCount;
+                    document.getElementById('estimatedCost').textContent = `$${estimatedCost.toFixed(4)}`;
                     
                     document.getElementById('results').classList.remove('hidden');
+                    
+                    // Update button text to show remaining requests
+                    const remaining = MAX_REQUESTS_PER_SESSION - requestCount;
+                    if (remaining > 0) {
+                        document.getElementById('processBtn').textContent = `🚀 Process Meeting (${remaining} remaining)`;
+                    } else {
+                        document.getElementById('processBtn').textContent = '🚀 Demo Limit Reached';
+                    }
                 } else {
-                    showError(data.error || 'Error al procesar el audio');
+                    showError(data.error || 'Error processing audio');
+                    requestCount--; // Don't count failed requests
                 }
             } catch (err) {
-                showError('Error de conexión: ' + err.message);
+                showError('Connection error: ' + err.message);
+                requestCount--; // Don't count failed requests
             } finally {
                 document.getElementById('processBtn').disabled = false;
                 document.getElementById('loading').classList.add('hidden');
@@ -238,6 +359,12 @@
             document.getElementById('errorMessage').textContent = message;
             document.getElementById('error').classList.remove('hidden');
         }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Don't auto-load files without API key
+            document.getElementById('audioPath').innerHTML = '<option value="">Enter API key above to load audio files</option>';
+        });
         
         // Allow Enter key to submit
         document.addEventListener('keypress', function(e) {
