@@ -47,7 +47,7 @@ def start_transcription_job(object_name, bucket_name):
         TranscriptionJobName=job_name,
         Media={'MediaFileUri': job_uri},
         MediaFormat='mp3',
-        LanguageCode='es-US' 
+        LanguageCode='en-GB' 
     )
     return job_name
 

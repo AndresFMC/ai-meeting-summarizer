@@ -48,7 +48,7 @@ graph LR
 | **S3** | Audio storage | Private bucket for file uploads |
 | **Lambda** | Pipeline orchestration | Python 3.12, 512MB RAM, 90s timeout |
 | **API Gateway** | REST endpoint | API Key authentication, rate limiting |
-| **Transcribe** | Audio → Text | Spanish (es-US), MP3 format |
+| **Transcribe** | Audio → Text | English (en-GB), MP3 format |
 | **Bedrock** | AI analysis | Claude 3 Sonnet v1 |
 
 ## 🚀 Key Features
