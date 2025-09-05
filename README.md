@@ -11,7 +11,7 @@ Automated transformation of meeting audio into actionable insights using Generat
 
 🔗 **[View Demo](http://andres-summarizer-frontend.s3-website.eu-central-1.amazonaws.com)**
 
-Demo API Key: `HqFd2VrMhL9utqqIO9J23Q0i0Zz8HQL3yhT4QIJc`
+**Note:** For security reasons, API access is restricted. Please [contact me on LinkedIn](https://www.linkedin.com/in/andres-fmc/) for a live demonstration or temporary API access.
 
 ## 🎯 Problem Statement
 
