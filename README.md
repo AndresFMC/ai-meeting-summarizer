@@ -9,7 +9,7 @@ Automated transformation of meeting audio into actionable insights using Generat
 
 ## 🌟 Live Demo
 
-🔗 **[View Demo](http://andres-summarizer-frontend.s3-website.eu-central-1.amazonaws.com)**
+🔗 **[View Demo](https://andres-meeting-summarizer-demo.s3.eu-central-1.amazonaws.com/index.html)**
 
 **Note:** For security reasons, API access is restricted. Please [contact me on LinkedIn](https://www.linkedin.com/in/andres-fmc/) for a live demonstration or temporary API access.
 
