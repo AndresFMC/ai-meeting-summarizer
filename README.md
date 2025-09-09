@@ -7,27 +7,27 @@
 
 Automated transformation of meeting audio into actionable insights using Generative AI and AWS services.
 
-## 🌟 Live Demo
+## Live Demo
 
 🔗 **[View Demo](https://andres-meeting-summarizer-demo.s3.eu-central-1.amazonaws.com/index.html)**
 
 **Note:** For security reasons, API access is restricted. Please [contact me on LinkedIn](https://www.linkedin.com/in/andres-fmc/) for a live demonstration or temporary API access.
 
-## 🎯 Problem Statement
+## Problem Statement
 
 In today's remote-first business environment, countless hours of virtual meetings are recorded daily, yet the valuable insights contained within these recordings are frequently lost because no one has time to review them. Manual extraction of key decisions, assigned tasks, and next steps is a tedious and error-prone process that scales poorly across organizations.
 
-## ✨ Solution
+## Solution
 
 A fully serverless system that automates the complete meeting analysis pipeline:
 
 1. **Upload** an audio file (MP3/WAV)
 2. **Receive** within seconds:
-   - 📋 **Executive Summary**: Key discussion points
-   - ✅ **Action Items**: Tasks with assigned owners
-   - 🎯 **Key Decisions**: Agreements and resolutions
+   - **Executive Summary**: Key discussion points
+   - **Action Items**: Tasks with assigned owners
+   - **Key Decisions**: Agreements and resolutions
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph LR
@@ -51,16 +51,16 @@ graph LR
 | **Transcribe** | Audio → Text | English (en-GB), MP3 format |
 | **Bedrock** | AI analysis | Claude 3 Sonnet v1 |
 
-## 🚀 Key Features
+## Key Features
 
-- ⚡ **Fast Processing**: ~15 seconds to analyze a complete meeting
-- 🔒 **Secure**: API Key authentication and rate limiting
-- 💰 **Cost-Effective**: < $0.01 per invocation
-- 🌍 **Scalable**: 100% elastic serverless architecture
-- 🎯 **Accurate**: >95% transcription accuracy
-- 🌐 **EU-Compliant**: Deployed in eu-central-1 region
+- **Fast Processing**: ~15 seconds to analyze a complete meeting
+- **Secure**: API Key authentication and rate limiting
+- **Cost-Effective**: < $0.01 per invocation
+- **Scalable**: 100% elastic serverless architecture
+- **Accurate**: >95% transcription accuracy
+- **EU-Compliant**: Deployed in eu-central-1 region
 
-## 💻 Installation & Deployment
+## Installation & Deployment
 
 ### Prerequisites
 
@@ -143,7 +143,7 @@ cd package && zip -r ../deployment_package.zip . && cd ..
 - Enable CORS
 - Create usage plan and API Key
 
-## 📖 API Usage
+## API Usage
 
 ### Endpoint
 ```
@@ -181,7 +181,7 @@ curl -X POST \
   https://your-api-url/v1/summarize
 ```
 
-## 🧪 Local Testing
+## Local Testing
 
 To test the pipeline locally:
 
@@ -193,7 +193,7 @@ Update variables in `main.py`:
 - `BUCKET_NAME`: Your S3 bucket
 - `AUDIO_FILE_PATH`: Local path to audio file
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ai-meeting-summarizer/
@@ -212,7 +212,7 @@ ai-meeting-summarizer/
 └── README.md             # This file
 ```
 
-## 🔧 Configuration & Variables
+## Configuration & Variables
 
 ### Lambda Environment Variables
 No environment variables required. All configuration is code-based.
@@ -223,7 +223,7 @@ No environment variables required. All configuration is code-based.
 - API rate limit: 100 requests/day per API Key
 - Lambda timeout: 90 seconds
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Error: "S3 object not found"
 - Verify file exists in bucket
@@ -238,7 +238,7 @@ No environment variables required. All configuration is code-based.
 - Verify audio format (must be MP3 or WAV)
 - Confirm language is configured correctly
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 | Metric | Value | Monitoring |
 |--------|-------|------------|
@@ -261,7 +261,7 @@ No environment variables required. All configuration is code-based.
 - 5-minute discussion: ~$0.15  
 - 30-minute conference: ~$0.90
 
-## 🏢 Business Impact
+## Business Impact
 
 This solution addresses real enterprise pain points:
 - **Time Savings**: Reduces manual meeting review from hours to seconds
@@ -269,7 +269,7 @@ This solution addresses real enterprise pain points:
 - **Knowledge Management**: Searchable meeting insights for teams
 - **Productivity**: Immediate action item extraction and assignment
 
-## 🚦 Roadmap
+## Roadmap
 
 - [ ] Multi-language support (German, French, Italian)
 - [ ] Google Drive/Dropbox integration
@@ -280,7 +280,7 @@ This solution addresses real enterprise pain points:
 - [ ] Speaker identification
 - [ ] GDPR compliance features
 
-## 🛠️ Technical Decisions
+## Technical Decisions
 
 **Why Serverless?**
 - Zero infrastructure management
@@ -310,19 +310,6 @@ Contributions welcome! Please:
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
 
-## 📄 License
-
-Distributed under MIT License. See `LICENSE` for details.
-
-## 👨‍💻 Author
-
-**Andrés F. Martínez Calderón**  
-Generative AI Engineer  
-
-- 📧 Email: [afmartinezcalderon@gmail.com](mailto:contact@example.com)
-- 💼 LinkedIn: [linkedin.com/in/andres-fmc](https://www.linkedin.com/in/andres-fmc/)
-- 🐙 GitHub: [@AndresFMC](https://github.com/AndresFMC)
-- 📍 Location: Gdańsk, Poland
 
 ---
 
