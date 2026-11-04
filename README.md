@@ -13,6 +13,8 @@ Automated transformation of meeting audio into actionable insights using Generat
 
 **Note:** For security reasons, API access is restricted. Please [contact me on LinkedIn](https://www.linkedin.com/in/andres-fmc/) for a live demonstration or temporary API access.
 
+> **Model update (Nov 2026):** AWS retired the Claude 3.x models on Amazon Bedrock, so this project now calls **Claude Haiku 5.5** through the EU cross-region inference profile `eu.anthropic.claude-haiku-5-5` (Frankfurt has no in-region capacity for it). The model is read from the `BEDROCK_MODEL_ID` environment variable. Latency and cost figures further down were measured with the original model. If the Lambda role restricts `bedrock:InvokeModel` to specific ARNs, it must allow both the inference profile and the Claude Haiku 5.5 foundation model in the EU regions the profile routes to.
+
 ## Problem Statement
 
 In today's remote-first business environment, countless hours of virtual meetings are recorded daily, yet the valuable insights contained within these recordings are frequently lost because no one has time to review them. Manual extraction of key decisions, assigned tasks, and next steps is a tedious and error-prone process that scales poorly across organizations.
@@ -35,7 +37,7 @@ graph LR
     B --> C[Lambda Function]
     C --> D[Amazon Transcribe]
     D -->|Transcript| C
-    C --> E[Amazon Bedrock<br/>Claude 3 Sonnet]
+    C --> E[Amazon Bedrock<br/>Claude Haiku 5.5]
     E -->|Analysis| C
     C --> F[API Gateway]
     F -->|JSON| G[Web Client]
@@ -49,7 +51,7 @@ graph LR
 | **Lambda** | Pipeline orchestration | Python 3.12, 512MB RAM, 90s timeout |
 | **API Gateway** | REST endpoint | API Key authentication, rate limiting |
 | **Transcribe** | Audio → Text | English (en-GB), MP3 format |
-| **Bedrock** | AI analysis | Claude 3 Sonnet v1 |
+| **Bedrock** | AI analysis | Claude Haiku 5.5 (EU inference profile) |
 
 ## Key Features
 

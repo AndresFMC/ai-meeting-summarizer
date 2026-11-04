@@ -11,6 +11,12 @@ from langchain_core.messages import HumanMessage
 from langsmith import Client
 from langchain.callbacks.tracers.langchain import LangChainTracer
 
+# Claude Haiku 5.5 via the EU cross-region inference profile (Claude 3.x was retired on Bedrock)
+BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "eu.anthropic.claude-haiku-5-5")
+# Claude Haiku 5.5 list price (prompts under 100K tokens), USD per 1K tokens
+PRICE_IN_PER_1K = 0.0001
+PRICE_OUT_PER_1K = 0.0005
+
 # --- Clientes de AWS (se definen fuera del handler para reutilización) ---
 # Esto es una optimización de rendimiento para Lambda.
 s3_client = boto3.client('s3')
@@ -89,8 +95,9 @@ def get_summary_from_bedrock_with_tracking(transcript, request_id):
     
     # Configurar LLM
     llm = ChatBedrock(
-        model_id="anthropic.claude-3-sonnet-20240229-v1:0",
-        model_kwargs={"temperature": 0.1},
+        model_id=BEDROCK_MODEL_ID,
+        provider="anthropic",
+        model_kwargs={"temperature": 0.1, "max_tokens": 2048},
         callbacks=callbacks
     )
     
@@ -228,12 +235,12 @@ def calculate_estimated_costs(file_size_bytes, transcript_word_count, processing
     audio_minutes = (file_size_bytes / 1024 / 1024)  # MB to minutes
     costs['transcribe'] = audio_minutes * 0.024
     
-    # Bedrock costs (Claude 3 Sonnet)
-    # Input: $0.003 per 1K tokens, Output: $0.015 per 1K tokens
+    # Bedrock costs (Claude Haiku 5.5)
+    # Input: $0.0001 per 1K tokens, Output: $0.0005 per 1K tokens
     # Estimación: 1 palabra ≈ 1.3 tokens
     input_tokens = transcript_word_count * 1.3 + 200  # +200 tokens del prompt
     output_tokens = 300  # Estimación conservadora del resumen
-    costs['bedrock'] = (input_tokens / 1000 * 0.003) + (output_tokens / 1000 * 0.015)
+    costs['bedrock'] = (input_tokens / 1000 * PRICE_IN_PER_1K) + (output_tokens / 1000 * PRICE_OUT_PER_1K)
     
     # S3 costs (muy bajo para este caso)
     costs['s3'] = 0.0001
@@ -281,9 +288,9 @@ def calculate_bedrock_costs_precise(input_text, output_text):
     input_tokens = estimate_tokens(input_text)
     output_tokens = estimate_tokens(output_text)
     
-    # Claude 3 Sonnet pricing eu-central-1
-    input_cost = (input_tokens / 1000) * 0.003
-    output_cost = (output_tokens / 1000) * 0.015
+    # Claude Haiku 5.5 pricing
+    input_cost = (input_tokens / 1000) * PRICE_IN_PER_1K
+    output_cost = (output_tokens / 1000) * PRICE_OUT_PER_1K
     
     return {
         'input_tokens': int(input_tokens),

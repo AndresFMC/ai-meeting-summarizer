@@ -84,10 +84,11 @@ def get_transcription_result(job_name):
         time.sleep(10)
 
 def get_summary_from_bedrock(transcript):
-    """Envía la transcripción a Bedrock (Claude 3) y obtiene un resumen."""
+    """Envía la transcripción a Bedrock (Claude Haiku 5.5) y obtiene un resumen."""
     print("Enviando transcripción a Bedrock para análisis...")
     llm = ChatBedrock(
-        model_id="anthropic.claude-3-sonnet-20240229-v1:0",
+        model_id=os.environ.get("BEDROCK_MODEL_ID", "eu.anthropic.claude-haiku-5-5"),
+        provider="anthropic",
         model_kwargs={"temperature": 0.1}
     )
     
